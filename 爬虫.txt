@@ -32,7 +32,7 @@ import Java.io.File;
             String text=newCl.getNewtext(doc);//获取新闻内容
     System.out.println("新闻Url:"+url);
     System.out.println("新闻标题:"+title);
-    //System.out.println("newsTime:"+time);
+    
     System.out.println("新闻内容:"+text);
     System.out.println("******************************************************************");
 
