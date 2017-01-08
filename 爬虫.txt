@@ -18,48 +18,49 @@ import Java.io.File;
  import org.jsoup.select.Elements;
 
  public class newCrawl {
-  public LinkedList ImgUrls=new LinkedList();//ÓÃÓÚ´æ·ÅÍ¼Æ¬URL
-  public LinkedList linkurls=new LinkedList();//ÓÃÓÚ´æ·ÅurlÁ´½Ó
+  public LinkedList ImgUrls=new LinkedList();//ç”¨äºå­˜æ”¾å›¾ç‰‡URL
+  public LinkedList linkurls=new LinkedList();//ç”¨äºå­˜æ”¾urlé“¾æ¥
 
   public static void main(String[] args) throws IOException {  
     newCrawl newCl = new newCrawl();   
 
     String url="http://world.huanqiu.com/article/2016-01/8412590.html?from=bdwz";
              Document doc = Jsoup.connect(url).get();
-             newCl.downloadPage(url);//ÏÂÔØÍøÒ³ 
-             String title=newCl.getnewTitle(doc);//»ñÈ¡ĞÂÎÅ±êÌâ
-            String time=newCl.getTime(doc);//»ñÈ¡ĞÂÎÅ·¢²¼Ê±¼ä
-            String text=newCl.getNewtext(doc);//»ñÈ¡ĞÂÎÅÄÚÈİ
-    System.out.println("ĞÂÎÅUrl:"+url);
-    System.out.println("ĞÂÎÅ±êÌâ:"+title);
+             newCl.downloadPage(url);//ä¸‹è½½ç½‘é¡µ 
+             String title=newCl.getnewTitle(doc);//è·å–æ–°é—»æ ‡é¢˜
+            String time=newCl.getTime(doc);//è·å–æ–°é—»å‘å¸ƒæ—¶é—´
+            String text=newCl.getNewtext(doc);//è·å–æ–°é—»å†…å®¹
+    System.out.println("æ–°é—»Url:"+url);
+    System.out.println("æ–°é—»æ ‡é¢˜:"+title);
+    System.out.printLN();
     //System.out.println("newsTime:"+time);
-    System.out.println("ĞÂÎÅÄÚÈİ:"+text);
+    System.out.println("æ–°é—»å†…å®¹:"+text);
     System.out.println("******************************************************************");
 
-    newCl.getImgurl(doc);//»ñÈ¡Í¼Æ¬Á´½Ó
-    newCl.getlinkurl(doc);//»ñÈ¡ÍøÒ³Á´½Ó
-    System.out.println("Í¼Æ¬urlÁ´½Ó");
+    newCl.getImgurl(doc);//è·å–å›¾ç‰‡é“¾æ¥
+    newCl.getlinkurl(doc);//è·å–ç½‘é¡µé“¾æ¥
+    System.out.println("å›¾ç‰‡urlé“¾æ¥");
     for (Object IU : newCl.ImgUrls) {
          System.out.println(IU);
        } 
 
     System.out.println("*****************************************************************");
-    System.out.println("urlÁ´½Ó");
+    System.out.println("urlé“¾æ¥");
     for (Object LU : newCl.linkurls) {
          System.out.println(LU);
        }
    }  
    
    public String getnewTitle(Document doc){
-    //»ñÈ¡ÍøÒ³µÄ±êÌâ
+    //è·å–ç½‘é¡µçš„æ ‡é¢˜
     String title=doc.title();
     return title;
    }
    public LinkedList getlinkurl(Document doc) throws IOException{
-    //»ñÈ¡ÍøÒ³ÖĞµÄËùÓĞurlµØÖ·£¬²¢±£´æÔÚlinkurlsÁ´±íÖĞ
+    //è·å–ç½‘é¡µä¸­çš„æ‰€æœ‰urlåœ°å€ï¼Œå¹¶ä¿å­˜åœ¨linkurlsé“¾è¡¨ä¸­
     Elements href = doc.select("a[href]");
     for (Element hre : href) {
-             String linkUrl = hre.attr("abs:href");//»ñÈ¡ÍøÒ³µÄ¾ø¶ÔµØÖ·
+             String linkUrl = hre.attr("abs:href");//è·å–ç½‘é¡µçš„ç»å¯¹åœ°å€
              if(!linkurls.contains(linkUrl)){
              linkurls.add(linkUrl);
              // System.out.println(linkUrl);
@@ -68,12 +69,12 @@ import Java.io.File;
     return linkurls;
    }
    public LinkedList getImgurl(Document doc) throws IOException{
-    //»ñÈ¡Í¼Æ¬µØÖ·£¬²¢±£´æÔÚImgUrlsÁ´±íÖĞ
+    //è·å–å›¾ç‰‡åœ°å€ï¼Œå¹¶ä¿å­˜åœ¨ImgUrlsé“¾è¡¨ä¸­
     int count=0;
     Elements pngs = doc.select("img[src]");
     for (Element img : pngs) {
     count++;
-             String imgUrl = img.attr("abs:src");//»ñÈ¡Í¼Æ¬µÄ¾ø¶ÔÂ·¾¶
+             String imgUrl = img.attr("abs:src");//è·å–å›¾ç‰‡çš„ç»å¯¹è·¯å¾„
              // imgUrl = img.absUrl("src");
               ImgUrls.add(imgUrl);
               //System.out.println(imgUrl);
@@ -82,59 +83,59 @@ import Java.io.File;
     return ImgUrls;
    }
    public void  downloadImg(String ImgUrl,int count) throws IOException{
-    //ÏÂÔØÍ¼Æ¬
-    String str="F:\\MyEclipse\\Img\\";//±£´æÏÂÔØÍ¼Æ¬ÎÄ¼ş¼Ğ
-    String ss=str+count+".png";//±£´æÍ¼Æ¬Â·¾¶
-    URL url=new URL(ImgUrl);  // ¹¹ÔìURL
-    URLConnection uc=url.openConnection(); // ´ò¿ªÁ¬½Ó
-    InputStream is=uc.getInputStream(); // ÊäÈëÁ÷
-    File file=new File(ss); //´´½¨ÎÄ¼ş
-    FileOutputStream out=new FileOutputStream(file);  // Êä³öµÄÎÄ¼şÁ÷
+    //ä¸‹è½½å›¾ç‰‡
+    String str="F:\\MyEclipse\\Img\\";//ä¿å­˜ä¸‹è½½å›¾ç‰‡æ–‡ä»¶å¤¹
+    String ss=str+count+".png";//ä¿å­˜å›¾ç‰‡è·¯å¾„
+    URL url=new URL(ImgUrl);  // æ„é€ URL
+    URLConnection uc=url.openConnection(); // æ‰“å¼€è¿æ¥
+    InputStream is=uc.getInputStream(); // è¾“å…¥æµ
+    File file=new File(ss); //åˆ›å»ºæ–‡ä»¶
+    FileOutputStream out=new FileOutputStream(file);  // è¾“å‡ºçš„æ–‡ä»¶æµ
      byte[] bs = new byte[1024];
-       // ¶ÁÈ¡µ½µÄÊı¾İ³¤¶È
+       // è¯»å–åˆ°çš„æ•°æ®é•¿åº¦
        int len;
-       // ¿ªÊ¼¶ÁÈ¡
+       // å¼€å§‹è¯»å–
        while ((len = is.read(bs)) != -1) {
        out.write(bs, 0, len);
        }
-       // Íê±Ï£¬¹Ø±ÕËùÓĞÁ´½Ó
+       // å®Œæ¯•ï¼Œå…³é—­æ‰€æœ‰é“¾æ¥
        out.close();
        is.close();
    }
    
    public String getNewtext(Document doc){
-    //»ñÈ¡ĞÂÎÅÄÚÈİ
+    //è·å–æ–°é—»å†…å®¹
             String text = doc.select("div.text").text(); 
              text=text.replace(Jsoup.parse("   ").text(), "");
              return text;
    }
    
    public String getTime(Document doc){
-    //»ñÈ¡ĞÂÎÅ·¢²¼µÄÊ±¼ä
+    //è·å–æ–°é—»å‘å¸ƒçš„æ—¶é—´
     String time=null;
-    Elements element=doc.select("strong.timeSummary");//´Ë´¦ÊÇ¸ù¾İ°Ù¶ÈĞÂÎÅµÄÍøÒ³ĞÎÊ½½âÎöµÄĞÂÎÅÊ±¼ä
-           String rex="^(((20\\d{2})-(\\d{2})-(\\d{2}))) ((\\d{2}):(\\d{2}):(\\d{2}))$";//ÕıÔò±í´ïÊ½ÓÃÓÚÆ¥ÅäÊ±¼ä
+    Elements element=doc.select("strong.timeSummary");//æ­¤å¤„æ˜¯æ ¹æ®ç™¾åº¦æ–°é—»çš„ç½‘é¡µå½¢å¼è§£æçš„æ–°é—»æ—¶é—´
+           String rex="^(((20\\d{2})-(\\d{2})-(\\d{2}))) ((\\d{2}):(\\d{2}):(\\d{2}))$";//æ­£åˆ™è¡¨è¾¾å¼ç”¨äºåŒ¹é…æ—¶é—´
            Pattern pattern=Pattern.compile(rex);
            for(Element el: element){
              String content = el.text();
              Matcher matcher=pattern.matcher(content);
              if(matcher.matches()){
              time=content;
-             System.out.println("ĞÂÎÅ·¢²¼Ê±¼äÎª£º"+content);
+             System.out.println("æ–°é—»å‘å¸ƒæ—¶é—´ä¸ºï¼š"+content);
              }
            }
            return time;
    }
    
    public static void downloadPage(String str){
-    //ÏÂÔØÍøÒ³
-    String filestr="F:/test";//ÉèÖÃÍøÒ³µÄ±£´æµØÖ·
+    //ä¸‹è½½ç½‘é¡µ
+    String filestr="F:/test";//è®¾ç½®ç½‘é¡µçš„ä¿å­˜åœ°å€
     try {
             URL pageUrl = new URL(str);
-            URLConnection uc =pageUrl.openConnection(); // ´ò¿ªÁ¬½Ó     
-            String path = pageUrl.getPath();//»ñÈ¡ÍøÒ³µÄÏà¶ÔÂ·¾¶
+            URLConnection uc =pageUrl.openConnection(); // æ‰“å¼€è¿æ¥     
+            String path = pageUrl.getPath();//è·å–ç½‘é¡µçš„ç›¸å¯¹è·¯å¾„
           //  System.out.println(path);
-            if (path.length() == 0) {//¶ÔÍøÒ³µÄÏà¶ÔÂ·¾¶½øĞĞ´¦Àí
+            if (path.length() == 0) {//å¯¹ç½‘é¡µçš„ç›¸å¯¹è·¯å¾„è¿›è¡Œå¤„ç†
                 path = "index.html";
             } else {
                 if (path.endsWith("/")) {
@@ -147,26 +148,26 @@ import Java.io.File;
                     }
                 }
             }
-            filestr=filestr+path;//ÍøÒ³±£´æÂ·¾¶
-            System.out.println("ÍøÒ³±£´æÂ·¾¶£º"+filestr);
-            //ÉèÖÃÍøÒ³±£´æÄ¿Â¼£¬µ±±£´æÍøÒ³µÄÎÄ¼ş¼Ğ²»´æÔÚÊ±£¬ĞèÒªÏÈ´´½¨ÎÄ¼ş¼Ğ£¬È»ºóÔÚ±£´æÍøÒ³
+            filestr=filestr+path;//ç½‘é¡µä¿å­˜è·¯å¾„
+            System.out.println("ç½‘é¡µä¿å­˜è·¯å¾„ï¼š"+filestr);
+            //è®¾ç½®ç½‘é¡µä¿å­˜ç›®å½•ï¼Œå½“ä¿å­˜ç½‘é¡µçš„æ–‡ä»¶å¤¹ä¸å­˜åœ¨æ—¶ï¼Œéœ€è¦å…ˆåˆ›å»ºæ–‡ä»¶å¤¹ï¼Œç„¶ååœ¨ä¿å­˜ç½‘é¡µ
             int lastSlash2 = filestr.lastIndexOf("/");
             String filestrr=filestr.substring(0,lastSlash2);
            // System.out.println(filestrr); 
-     File file2=new File(filestrr); //´´½¨ÎÄ¼şÄ¿Â¼
+     File file2=new File(filestrr); //åˆ›å»ºæ–‡ä»¶ç›®å½•
      file2.mkdirs();
-   File file=new File(filestr); //´´½¨ÎÄ¼ş 
-   InputStream is=uc.getInputStream(); // ÊäÈëÁ÷
-   FileOutputStream out=new FileOutputStream(file);  // Êä³öµÄÎÄ¼şÁ÷
+   File file=new File(filestr); //åˆ›å»ºæ–‡ä»¶ 
+   InputStream is=uc.getInputStream(); // è¾“å…¥æµ
+   FileOutputStream out=new FileOutputStream(file);  // è¾“å‡ºçš„æ–‡ä»¶æµ
     byte[] bs = new byte[1024];
-      // ¶ÁÈ¡µ½µÄÊı¾İ³¤¶È
+      // è¯»å–åˆ°çš„æ•°æ®é•¿åº¦
       int len;
-      // ¿ªÊ¼¶ÁÈ¡
+      // å¼€å§‹è¯»å–
       while ((len = is.read(bs)) != -1) {
       
 out.write(bs, 0, len);
       }
-      // Íê±Ï£¬¹Ø±ÕËùÓĞÁ´½Ó
+      // å®Œæ¯•ï¼Œå…³é—­æ‰€æœ‰é“¾æ¥
       out.close();
       is.close();
         } catch (Exception ex) {
